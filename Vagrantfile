@@ -6,11 +6,15 @@ Vagrant::Config.run do |config|
   config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
 
   require "rbconfig"
-  windows = Config::CONFIG['host_os'] =~ /mswin|mingw/
 
-  nfs_flag = { :nfs => true } unless windows
-  config.vm.network "33.33.33.10" unless windows
-  config.vm.share_folder("v-root", "/vagrant", ".", nfs_flag)
+  config.vm.host_name = "haskell"
+#  config.hosts.name = "haskell.dev"
+
+  config.vm.network :hostonly, "33.33.33.10"
+  config.vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+
+  nfs_flag = (RUBY_PLATFORM =~ /linux|darwin/)
+  config.vm.share_folder("v-root", "/vagrant", ".", :nfs => true, :create => true)
 
   sources = File.expand_path File.join(__FILE__, '..', '..')
   project = File.basename(sources)
@@ -29,6 +33,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe "apt"
     chef.add_recipe "haskell-platform"
     chef.add_recipe "heroku-toolbelt"
+    chef.add_recipe "yesod-platform"
     chef.json.merge!({
       :ghc_version => '7.4.1',
       :haskell_platform_version => '2012.2.0.0'
