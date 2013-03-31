@@ -5,6 +5,13 @@ Vagrant::Config.run do |config|
   config.vm.box = "lucid64"
   config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
 
+  require "rbconfig"
+  windows = Config::CONFIG['host_os'] =~ /mswin|mingw/
+
+  nfs_flag = { :nfs => true } unless windows
+  config.vm.network "33.33.33.10" unless windows
+  config.vm.share_folder("v-root", "/vagrant", ".", nfs_flag)
+
   sources = File.expand_path File.join(__FILE__, '..', '..')
   project = File.basename(sources)
 
