@@ -14,7 +14,7 @@ Vagrant::Config.run do |config|
   config.vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 
   nfs_flag = (RUBY_PLATFORM =~ /linux|darwin/)
-  config.vm.share_folder("v-root", "/vagrant", ".", :nfs => true, :create => true)
+  config.vm.share_folder("vagrant-root", "/vagrant", ".", :nfs => true, :create => true)
 
   sources = File.expand_path File.join(__FILE__, '..', '..')
   project = File.basename(sources)
