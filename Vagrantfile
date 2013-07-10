@@ -7,7 +7,7 @@ Vagrant::Config.run do |config|
 
   require "rbconfig"
 
-  config.vm.host_name = "haskell"
+  config.vm.hostname = "haskell"
 #  config.hosts.name = "haskell.dev"
 
   config.vm.network :hostonly, "33.33.33.10"
